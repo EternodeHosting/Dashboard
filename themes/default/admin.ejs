@@ -1,0 +1,279 @@
+<html class="h-full bg-pylex-800">
+<head>
+    <title>Eternodes</title>
+    <link href="/assets/tailwind.css" rel="stylesheet">
+    <link rel="shortcut icon" href="https://i.ibb.co/3spp2wn/80c8a7933e558b06e82a9c07a114ec15.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+</head>
+<body style="font-family: 'Lexend Deca', sans-serif;" class="bg-pylex-800 h-full">
+<!--
+  Copyright 2017 - 2023 Eternodes Platforms, Ltd
+-->
+<div>
+  <nav class="bg-pylex-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <img src="https://i.ibb.co/3spp2wn/80c8a7933e558b06e82a9c07a114ec15.png" class="h-10 w-10">
+          </div>
+          <div class="flex-shrink-0">
+            <h3 class="text-white pl-4">Eternodes</h3>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <!-- Current: "bg-pylex-900 text-white", Default: "text-pylex-300 hover:bg-pylex-700 hover:text-white" -->
+              <a href="../dashboard" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+             
+              <a href="../servers/new" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Create</a>
+
+              <a href="../account" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Account</a>
+
+              <a href="../earn" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Earn</a>
+
+              <a href="../store" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Store</a>
+
+              <a href="../referrals" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Referrals</a>
+
+              <a href="../transfer" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Transfer</a>
+        <% if (pterodactyl.root_admin == true) { %>
+              <a href="../admin" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</a>
+        <% } %>               
+            </div>
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <div class="ml-4 flex items-center md:ml-6">
+            <!-- Profile dropdown -->
+            <div x-data="{show: false}" x-on:click.away="show = false" class="ml-3 relative">
+              <div>
+                <button x-on:click="show = !show" type="button" class="max-w-xs bg-pylex-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-pylex-800 focus:ring-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                  <span class="sr-only">Open user menu</span>
+                  <img class="h-8 w-8 rounded-full" src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="">
+                </button>
+              </div>
+
+              <!--
+                Dropdown menu, show/hide based on menu state.
+                Entering: "transition ease-out duration-100"
+                  From: "transform opacity-0 scale-95"
+                  To: "transform opacity-100 scale-100"
+                Leaving: "transition ease-in duration-75"
+                  From: "transform opacity-100 scale-100"
+                  To: "transform opacity-0 scale-95"
+              -->
+              <div x-show="show" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-pylex-700 ring-1 ring-pylex-600 ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                <!-- Active: "bg-pylex-100", Not Active: "" -->
+                <a href="../account" class="block px-4 py-2 text-sm text-pylex-300 role="menuitem" tabindex="-1" id="user-menu-item-0">Account</a>
+
+                <a href="../logout" class="block px-4 py-2 text-sm text-red-500" role="menuitem" tabindex="-1" id="user-menu-item-2">Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="-mr-2 flex md:hidden">
+          <!-- Mobile menu button -->
+          <button type="button" class="bg-pylex-800 inline-flex items-center justify-center p-2 rounded-md text-pylex-400 hover:text-white hover:bg-pylex-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-pylex-800 focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <!--
+              Heroicon name: outline/menu
+              Menu open: "hidden", Menu closed: "block"
+            -->
+            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <!--
+              Heroicon name: outline/x
+              Menu open: "block", Menu closed: "hidden"
+            -->
+            <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu, show/hide based on menu state. -->
+    <div class="md:hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <!-- Current: "bg-pylex-700 text-white", Default: "text-pylex-300 hover:bg-pylex-700 hover:text-white" -->
+              <a href="../dashboard" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+             
+              <a href="../servers/new" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Create</a>
+
+              <a href="../account" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Account</a>
+
+              <a href="../earn" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Earn</a>
+
+              <a href="../store" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Store</a>
+
+              <a href="../referrals" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Referrals</a>
+
+              <a href="../transfer" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Transfer</a>
+        <% if (pterodactyl.root_admin == true) { %>
+              <a href="../admin" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</a>
+        <% } %>               
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <!-- Replace with your content -->
+<!-- This example requires Tailwind CSS v2.0+ -->
+<!-- This example requires Tailwind CSS v2.0+ -->
+<% if (req.query.err == "none") { %>
+<div class="rounded-md bg-green-800 p-4 mb-8">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <!-- Heroicon name: solid/information-circle -->
+      <svg class="h-5 w-5 text-green-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3 flex-1 md:flex md:justify-between">
+      <p class="text-sm text-green-400">Action completed.</p>
+    </div>
+  </div>
+</div>
+<% } %>
+<% if (req.query.err == "ALREADYEXISTS") { %>
+<div class="rounded-md bg-red-800 p-4 mb-8">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <!-- Heroicon name: solid/information-circle -->
+      <svg class="h-5 w-5 text-red-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3 flex-1 md:flex md:justify-between">
+      <p class="text-sm text-red-400">The code you provided already exists.</p>
+    </div>
+  </div>
+</div>
+<% } %>
+<% if (req.query.err == "INVALIDCODE") { %>
+<div class="rounded-md bg-red-800 p-4 mb-8">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <!-- Heroicon name: solid/information-circle -->
+      <svg class="h-5 w-5 text-red-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3 flex-1 md:flex md:justify-between">
+      <p class="text-sm text-red-400">No code was provided or the one you provided was invalid.</p>
+    </div>
+  </div>
+</div>
+<% } %>
+<div id="dailycoins" class="rounded-md bg-sky-800 p-4 mb-8">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <!-- Heroicon name: solid/information-circle -->
+      <svg class="h-5 w-5 text-sky-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3 flex-1 md:flex md:justify-between">
+      <p class="text-sm text-sky-400">You can claim your daily 150 Coins!</p>
+      <p class="mt-3 text-sm md:mt-0 md:ml-6">
+        <a href="../daily-coins" class="whitespace-nowrap font-bold text-sky-400 hover:text-sky-300">Claim</a>
+      </p>
+    </div>
+  </div>
+</div>
+<div>
+<script>
+  // Send a GET request to the /api/dailystatus endpoint
+  fetch('/api/dailystatus')
+    .then(response => response.json())
+    .then(data => {
+      // Check the response from the server
+      if (data.text === '1') {
+        // Show the "dailycoins" div if the server returns { "text": "1" }
+        document.getElementById('dailycoins').style.display = 'block';
+      } else {
+        document.getElementById('dailycoins').style.display = 'none';
+      }
+    })
+    .catch(error => console.error('Error:', error));
+</script>
+<% if (req.query.success == "WELCOME") { %>
+<div class="rounded-md bg-green-800 p-4 mb-8">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <!-- Heroicon name: solid/information-circle -->
+      <svg class="h-5 w-5 text-green-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3 flex-1 md:flex md:justify-between">
+      <p class="text-sm text-green-400">Welcome to LocalNodes, <%= req.session.userinfo.username%>! Once you are ready, feel free to create your first free server.</p>
+    </div>
+  </div>
+</div>
+<% } %>
+<div>
+
+
+        <%
+            let ram = 0;
+            let disk = 0;
+            let cpu = 0;
+            let servers = pterodactyl.relationships.servers.data.length;
+            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+            }
+        %>
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="bg-pylex-700 px-4 py-5 border-b border-pylex-600 rounded-t sm:px-6 mt-8">
+  <h3 class="text-lg leading-6 font-medium text-white">Add Coins</h3>
+  <p class="mt-1 text-sm text-pylex-300">You can add Coins to people here.</p>
+</div>
+<div class="bg-pylex-700 rounded-b px-4 py-5 sm:px-6">
+<form action="/addcoins2" method="get">
+  <input type="text" name="id" class="transition ease-in-out delay-100 block w-1/4 flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="Discord ID"><br>
+  <input type="text" name="coins" class="transition ease-in-out delay-100 block w-1/4 flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="Amount"><br>
+        <button type="submit" class="transition ease-in-out delay-100 group relative flex w-auto justify-center rounded-md border border-transparent bg-sky-400 py-2 px-4 text-sm font-medium text-white hover:bg-sky-500 focus:outline-none">
+          Add
+        </button>
+</form>
+</div> 
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="bg-pylex-700 px-4 py-5 border-b border-pylex-600 rounded-t sm:px-6 mt-8">
+  <h3 class="text-lg leading-6 font-medium text-white">Set Coins</h3>
+  <p class="mt-1 text-sm text-pylex-300">You can set Coins to people here.</p>
+</div>
+<div class="bg-pylex-700 rounded-b px-4 py-5 sm:px-6">
+<form action="/setcoins" method="get">
+  <input type="text" name="id" class="transition ease-in-out delay-100 block w-1/4 flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="Discord ID"><br>
+  <input type="text" name="coins" class="transition ease-in-out delay-100 block w-1/4 flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="Amount"><br>
+        <button type="submit" class="transition ease-in-out delay-100 group relative flex w-auto justify-center rounded-md border border-transparent bg-sky-400 py-2 px-4 text-sm font-medium text-white hover:bg-sky-500 focus:outline-none">
+          Set
+        </button>
+</form>
+</div> 
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="bg-pylex-700 px-4 py-5 border-b border-pylex-600 rounded-t sm:px-6 mt-8">
+  <h3 class="text-lg leading-6 font-medium text-white">Remove Account</h3>
+  <p class="mt-1 text-sm text-pylex-300">You can remove an account here.</p>
+</div>
+<div class="bg-pylex-700 rounded-b px-4 py-5 sm:px-6">
+<form action="/remove_account" method="get">
+  <input type="text" name="id" class="transition ease-in-out delay-100 block w-1/4 flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="Discord ID"><br>
+        <button type="submit" class="transition ease-in-out delay-100 group relative flex w-auto justify-center rounded-md border border-transparent bg-sky-400 py-2 px-4 text-sm font-medium text-white hover:bg-sky-500 focus:outline-none">
+          Remove
+        </button>
+</form>
+</div>    
+      <!-- /End replace -->
+    </div>
+  </main>
+</div>

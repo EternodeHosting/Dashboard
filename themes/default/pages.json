@@ -1,0 +1,127 @@
+{
+    "index": "index.ejs",
+    "notfound": "404.ejs",
+    "redirect": {
+        "callback": "/dashboard",
+        "failedcallback": "/",
+        "logout": "/",
+        "deleteserver": "/dashboard",
+        "updateservers": "/dashboard",
+        "createserver": "/dashboard",
+        "failedcreateserver": "/servers/new",
+        "modifyserver": "/change",
+        "failedmodifyserver": "/servers/edit",
+        "setplan": "/admin",
+        "failedsetplan": "/admin",
+        "getip": "/admin",
+        "failedgetip": "/admin",
+        "createserverdisabled": "/servers?err=disabled",
+        "modifyserverdisabled": "/servers?err=disabled",
+        "deleteserverdisabled": "/servers?err=disabled",
+        "regenpassword": "/creds",
+        "setresources": "/admin",
+        "failedsetresources": "/admin",
+        "renewserver": "/servers",
+        "failedrenewserver": "/servers",
+        "setcoins": "/admin",
+        "failedsetcoins": "/admin",
+        "purchaseram": "/store",
+        "failedpurchaseram": "/store",
+        "purchasedisk": "/store",
+        "failedpurchasedisk": "/store",
+        "purchasecpu": "/store",
+        "failedpurchasecpu": "/store",
+        "purchaseservers": "/store",
+        "failedpurchaseservers": "/store",
+        "arcioerror": "/earn",
+        "missingorinvalidcouponcode": "/redeem",
+        "successfullyredeemedcoupon": "/redeem",
+        "couponcreationfailed": "/admin",
+        "couponcreationsuccess": "/admin",
+        "couponrevokefailed": "/admin",
+        "couponrevokesuccess": "/admin",
+        "removeaccountfailed": "/admin",
+        "removeaccountsuccess": "/admin"
+    },
+    "pages": {
+        "dashboard": "dashboard.ejs",
+        "change": "change.ejs",
+        "servers": "servers.ejs",
+        "servers/new": "create.ejs",
+        "servers/edit": "edit.ejs",
+        "admin": "admin.ejs",
+        "store": "store.ejs",
+        "earn": "arcio.ejs",
+        "daily": "dashboard.ejs",
+        "referrals": "referrals.ejs",
+        "trivia": "trivia.ejs",
+        "transfer": "transfer.ejs",
+        "account": "account.ejs",
+        "account/delete": "delete_account.ejs"
+    },
+    "mustbeloggedin": [
+        "/dashboard",
+        "/servers",
+        "/servers/new",
+        "/servers/edit",
+        "/store",
+        "/earn",
+        "/redeem",
+        "/account"
+    ],
+    "mustbeadmin": [
+        "/admin"
+    ],
+    "generateafktoken": [
+        "/earn"
+    ],
+    "variables": {
+        "footerad": true,
+        "faviconlink": "https://i.ibb.co/3spp2wn/80c8a7933e558b06e82a9c07a114ec15.png",
+        "home": {
+            "title": "Home - Eternodes",
+            "buttontext": {
+                "loggedin": {
+                    "text": "Dashboard",
+                    "link": "/dashboard"
+                },
+                "loggedout": {
+                    "_note": "This below supports HTML encoding.",
+
+                    "text": "<img src=\"https://i.ibb.co/3spp2wn/80c8a7933e558b06e82a9c07a114ec15.png\" width=\"25\" /> Login with Discord",
+                    "link": "/login"
+                }
+            }
+        },
+        "dashboard": {
+            "title": "Dashboard - Dashactyl"
+        },
+        "servers": {
+            "title": {
+                "list": "Servers - Dashactyl",
+                "create": "Create Server - Dashactyl",
+                "modify": "Modify Server - Dashactyl"
+            }
+        },
+        "error": {
+            "title": "404 - Dashactyl"
+        },
+        "admin": {
+            "title": {
+                "default": "Admin - Dashactyl"
+            }
+        },
+        "store": {
+            "title": "Store - Dashactyl"
+        },
+        "arcio": {
+            "title": "AFK Page - Dashactyl"
+        },
+        "maintenance": {
+            "title": "Maintenance - Dashactyl"
+        },
+        "redeem": {
+            "title": "Redeem - Dashactyl"
+        }
+    }
+}

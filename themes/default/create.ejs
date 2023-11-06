@@ -1,0 +1,520 @@
+<html class="h-full bg-pylex-800">
+<head>
+    <title>Eternodes</title>
+    <link href="/assets/tailwind.css" rel="stylesheet">
+    <link rel="shortcut icon" href="https://i.ibb.co/3spp2wn/80c8a7933e558b06e82a9c07a114ec15.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.css" integrity="sha512-MpdEaY2YQ3EokN6lCD6bnWMl5Gwk7RjBbpKLovlrH6X+DRokrPRAF3zQJl1hZUiLXfo2e9MrOt+udOnHCAmi5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body style="font-family: 'Lexend Deca', sans-serif;" class="bg-pylex-800 h-full">
+<!--
+  Copyright 2017 - 2023 Eternodes Platforms, Ltd
+-->
+<style>
+.alertify-notifier .ajs-message.ajs-success {
+/* From https://css.glass */
+background: rgba(7, 89, 133, 0.54);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(6.8px);
+-webkit-backdrop-filter: blur(6.8px);
+border: 1px solid rgba(7, 89, 133, 0.3);
+  border-radius: 6px;
+  color: #12a7f8;
+  font-family: 'Lexend Deca', sans-serif;
+  width: 400px;
+  padding: 24px;
+}
+
+.alertify-notifier.ajs-right {
+  right: 140px;
+}
+</style>
+<div>
+  <nav class="bg-pylex-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <img src="https://i.ibb.co/3spp2wn/80c8a7933e558b06e82a9c07a114ec15.png" class="h-10 w-10">
+          </div>
+          <div class="flex-shrink-0">
+            <h3 class="text-white pl-4">Eternodes</h3>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <!-- Current: "bg-pylex-900 text-white", Default: "text-pylex-300 hover:bg-pylex-700 hover:text-white" -->
+              <a href="../dashboard" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+             
+              <a href="../servers/new" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Create</a>
+
+              <a href="../account" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Account</a>
+
+              <a href="../earn" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Earn</a>
+
+              <a href="../store" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Store</a>
+
+              <a href="../referrals" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Referrals</a>
+
+              <a href="../transfer" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Transfer</a>
+        <% if (pterodactyl.root_admin == true) { %>
+              <a href="../admin" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</a>
+        <% } %> 
+            </div>
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <div class="ml-4 flex items-center md:ml-6">
+            <!-- Profile dropdown -->
+            <div x-data="{show: false}" x-on:click.away="show = false" class="ml-3 relative">
+              <div>
+                <button x-on:click="show = !show" type="button" class="max-w-xs bg-pylex-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-pylex-800 focus:ring-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                  <span class="sr-only">Open user menu</span>
+                  <img class="h-8 w-8 rounded-full" src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="">
+                </button>
+              </div>
+
+              <!--
+                Dropdown menu, show/hide based on menu state.
+                Entering: "transition ease-out duration-100"
+                  From: "transform opacity-0 scale-95"
+                  To: "transform opacity-100 scale-100"
+                Leaving: "transition ease-in duration-75"
+                  From: "transform opacity-100 scale-100"
+                  To: "transform opacity-0 scale-95"
+              -->
+              <div x-show="show" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-pylex-700 ring-1 ring-pylex-600 ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                <!-- Active: "bg-pylex-100", Not Active: "" -->
+                <a href="../account" class="block px-4 py-2 text-sm text-pylex-300 role="menuitem" tabindex="-1" id="user-menu-item-0">Account</a>
+
+                <a href="../logout" class="block px-4 py-2 text-sm text-red-500" role="menuitem" tabindex="-1" id="user-menu-item-2">Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="-mr-2 flex md:hidden">
+          <!-- Mobile menu button -->
+          <button type="button" class="bg-pylex-800 inline-flex items-center justify-center p-2 rounded-md text-pylex-400 hover:text-white hover:bg-pylex-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-pylex-800 focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <!--
+              Heroicon name: outline/menu
+              Menu open: "hidden", Menu closed: "block"
+            -->
+            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <!--
+              Heroicon name: outline/x
+              Menu open: "block", Menu closed: "hidden"
+            -->
+            <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu, show/hide based on menu state. -->
+    <div class="md:hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <!-- Current: "bg-pylex-700 text-white", Default: "text-pylex-300 hover:bg-pylex-700 hover:text-white" -->
+              <a href="../dashboard" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+             
+              <a href="../servers/new" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Create</a>
+
+              <a href="../account" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Account</a>
+
+              <a href="../earn" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Earn</a>
+
+              <a href="../store" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Store</a>
+
+              <a href="../referrals" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Referrals</a>
+
+              <a href="../transfer" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Transfer</a>
+        <% if (pterodactyl.root_admin == true) { %>
+              <a href="../admin" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</a>
+        <% } %> 
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <!-- Replace with your content -->
+               <% if (req.query.err) { %>
+<div class="rounded-md bg-red-800 p-4 mb-8">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <!-- Heroicon name: solid/information-circle -->
+      <svg class="h-5 w-5 text-red-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3 flex-1 md:flex md:justify-between">
+      <p class="text-sm text-red-400">
+                        <% if (req.query.err == "MISSINGVARIABLE") { %>
+                            You have not filled out all of the server information.
+                        <% } else if (req.query.err == "ERRORONCREATE") { %>
+                           Failed to create server! This is most likely an issue on Pylex's end, not yours.
+                        <% } else if (req.query.err == "MISSINGEGG") { %>
+                            The server type for this server is not registered as a valid server type, therefore your server's RAM, disk and/or CPU could not be changed.
+                        <% } else { %>
+                            <% if (req.query.num) { %>
+                                <% if (!isNaN(parseFloat(req.query.num))) { %>
+                                    <% if (req.query.err == "TOOLITTLERAM" || req.query.err == "TOOLITTLEDISK" || req.query.err == "TOOLITTLECPU") { %>
+                                        You must make a server with at least <b><%= req.query.num %></b>
+                                        <% if (req.query.err.slice(-3) == "RAM") { %>
+                                            MB RAM
+                                        <% } else if (req.query.err.slice(-4) == "DISK") { %>
+                                            MB disk
+                                        <% } else { // CPU %>
+                                            % CPU
+                                        <% } %>
+                                        if you want to modified a server with the server type you have selected.
+                                    <% } else if (req.query.err == "TOOMUCHRAM" || req.query.err == "TOOMUCHDISK" || req.query.err == "TOOMUCHCPU") { %>
+                                        With the selected server type, you can have a maximum of <b><%= req.query.num %></b>
+                                        <% if (req.query.err.slice(-3) == "RAM") { %>
+                                            MB RAM
+                                        <% } else if (req.query.err.slice(-4) == "DISK") { %>
+                                            MB disk
+                                        <% } else { // CPU %>
+                                            % CPU
+                                        <% } %>
+                                        on the server.
+                                    <% } else if (req.query.err == "EXCEEDRAM" || req.query.err == "EXCEEDDISK" || req.query.err == "EXCEEDCPU") { %>
+                                        The server could not be modified because you have requested to modified a server that exceeds your plan.
+										<% } %>
+									
+									<% } %>
+								<% } else { %>
+									Failed to create server! This is most likely an issue on Pylex's end, not yours.
+								<% } %>
+                                  
+                        <% } %>
+</p>
+    </div>
+  </div>
+</div>
+            <% } %>
+<!-- This example requires Tailwind CSS v2.0+ -->
+<!--
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+-->
+<div>
+  <div class="md:grid md:grid-cols-3 md:gap-6">
+    <div class="md:col-span-1">
+      <div class="px-4 sm:px-0">
+        <h3 class="text-lg font-medium leading-6 text-white">Basic Details</h3>
+        <p class="mt-1 text-sm text-pylex-400">This information will be displayed in the server management list on both the Panel and Dashboard.</p>
+      </div>
+    </div>
+    <div class="mt-5 md:col-span-2 md:mt-0">
+      <form action="#" method="POST">
+        <div class="shadow sm:overflow-hidden sm:rounded-md">
+          <div class="space-y-6 bg-pylex-700 px-4 py-5 sm:p-6 rounded-md ">
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
+                <label for="company-website" class="block text-sm font-medium text-pylex-400">Server Label</label>
+                <div class="mt-1 flex rounded-md shadow-sm">
+                  <input type="text" name="company-website" id="name" class="transition ease-in-out delay-100 block w-full flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="my-server-0001">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="about" class="block text-sm font-medium text-pylex-400">Description</label>
+              <div class="mt-1">
+                <textarea id="about" name="about" rows="3" class="transition ease-in-out delay-100 block w-full flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="We couldn't figure out what a good placeholder description should be..."></textarea>
+              </div>
+              <p class="mt-2 text-sm text-pylex-500">Brief description for your server. This can be changed on the Panel.</p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="hidden sm:block" aria-hidden="true">
+  <div class="py-5">
+    <div class="border-t border-pylex-700/50"></div>
+  </div>
+</div>
+
+<div class="mt-10 sm:mt-0">
+  <div class="md:grid md:grid-cols-3 md:gap-6">
+    <div class="md:col-span-1">
+      <div class="px-4 sm:px-0">
+        <h3 class="text-lg font-medium leading-6 text-white">Location</h3>
+        <p class="mt-1 text-sm text-pylex-400">Use the closest location to you. Or if you are running a game server, then the closest location to your users.</p>
+      </div>
+    </div>
+    <div class="mt-5 md:col-span-2 md:mt-0">
+      <form action="#" method="POST">
+        <div class="overflow-hidden shadow sm:rounded-md">
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div>
+  <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+    <li class="col-span-1 flex shadow-sm rounded-md">
+      <div class="flex-shrink-0 flex items-center justify-center w-16 bg-pylex-700 border-t border-b border-l border-pylex-600 text-white text-sm font-medium rounded-l-md"><img src="https://flagsapi.com/FR/flat/48.png" style="border-radius: 18px;"></div>
+      <div class="flex-1 flex items-center justify-between border-t border-r border-b border-pylex-600 bg-pylex-700 rounded-r-md">
+        <div class="flex-1 px-4 py-2 text-sm truncate">
+          <a onclick="euwest()" class="text-white font-medium hover:text-sky-400 cursor-pointer">France</a>
+          <p class="text-pylex-400">eu-west</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="hidden sm:block" aria-hidden="true">
+  <div class="py-5">
+    <div class="border-t border-pylex-700/50"></div>
+  </div>
+</div>
+
+<script>
+let inputEGGG = ""
+let inputLOCC = ""
+
+function paper() {
+  alertify.set('notifier','position', 'top-right');
+  alertify.success('Selected image: paper');
+  inputEGGG = "paper";
+  // Paper
+}
+
+function pmmp() {
+  alertify.set('notifier','position', 'top-right');
+  alertify.success('Selected image: pmmp');
+  inputEGGG = "pmmp";
+  // PMMP
+}
+
+function vanilla() {
+  alertify.set('notifier','position', 'top-right');
+  alertify.success('Selected image: vanilla');
+  inputEGGG = "vanilla";
+  // Vanilla
+}
+
+function forge() {
+  alertify.set('notifier','position', 'top-right');
+  alertify.success('Selected image: forge');
+  inputEGGG = "forge";
+  // Forge
+}
+
+// Locations
+
+function euwest() {
+  alertify.set('notifier','position', 'top-right');
+  alertify.success('Selected location: uk-west');
+  inputLOCC = "1";
+  // France
+}
+</script>
+                                <script>
+                                    async function submitForm() {
+                                        let name = encodeURIComponent(document.getElementById("name").value);
+                                        let egg = inputEGGG;
+                                        let ram = encodeURIComponent(document.getElementById("ram").value)*1024;
+                                        let disk = encodeURIComponent(document.getElementById("disk").value*1024);
+                                        let cpu = encodeURIComponent(document.getElementById("cpu").value);
+                                        let location = inputLOCC;
+                                        document.location.href = `/create?name=${name}&egg=${egg}&ram=${ram}&disk=${disk}&cpu=${cpu}&location=${location}`;
+                                    };
+                                </script>
+
+<div class="mt-10 sm:mt-0">
+  <div class="md:grid md:grid-cols-3 md:gap-6">
+    <div class="md:col-span-1">
+      <div class="px-4 sm:px-0">
+        <h3 class="text-lg font-medium leading-6 text-white">Image</h3>
+        <p class="mt-1 text-sm text-pylex-400">Decide which image you'd like to use.</p>
+      </div>
+    </div>
+    <div class="mt-5 md:col-span-2 md:mt-0">
+      <form action="#" method="POST">
+        <div class="overflow-hidden shadow sm:rounded-md">
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div>
+  <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <li class="col-span-1 flex shadow-sm rounded-md">
+      <div class="flex-shrink-0 flex items-center justify-center w-16 bg-pylex-700 border-t border-b border-l border-pylex-600 text-white text-sm font-medium rounded-l-md"><img src="https://i.ibb.co/12zPPwP/R.png" style="width: 48px; height: 48px;"></div>
+      <div class="flex-1 flex items-center justify-between border-t border-r border-b border-pylex-600 bg-pylex-700 rounded-r-md truncate cursor-pointer">
+        <div class="flex-1 px-4 py-2 text-sm truncate">
+          <a onclick="paper()" class="text-white font-medium hover:text-sky-400">Paper</a>
+          <p class="text-pylex-400">MC Java</p>
+        </div>
+      </div>
+    </li>
+
+    <!-- <li class="col-span-1 flex shadow-sm rounded-md">
+      <div class="flex-shrink-0 flex items-center justify-center w-16 bg-pylex-700 border-t border-b border-l border-pylex-600 text-white text-sm font-medium rounded-l-md"><img src="https://cdn.discordapp.com/attachments/1063585626022223892/1073908427753013248/1390178-removebg-preview.png" style="width: 48px; height: 48px;"></div>
+      <div class="flex-1 flex items-center justify-between border-t border-r border-b border-pylex-600 bg-pylex-700 rounded-r-md truncate">
+        <div class="flex-1 px-4 py-2 text-sm truncate">
+          <a onclick="forge()" class="text-white font-medium hover:text-sky-400 cursor-pointer">Forge</a>
+          <p class="text-pylex-400">MC Java</p>
+        </div>
+      </div>
+    </li> -->
+
+    <li class="col-span-1 flex shadow-sm rounded-md">
+      <div class="flex-shrink-0 flex items-center justify-center w-16 bg-pylex-700 border-t border-b border-l border-pylex-600 text-white text-sm font-medium rounded-l-md"><img src="https://infotoast.org/site/wp-content/uploads/2020/06/pocketmine-220x220.png" style="width: 48px; height: 48px; border-radius: 8px;"></div>
+      <div class="flex-1 flex items-center justify-between border-t border-r border-b border-pylex-600 bg-pylex-700 rounded-r-md truncate">
+        <div class="flex-1 px-4 py-2 text-sm truncate">
+          <a onclick="pmmp()" class="text-white font-medium hover:text-sky-400 cursor-pointer">Pocketmine</a>
+          <p class="text-pylex-400">MC Bedrock</p>
+        </div>
+      </div>
+    </li>
+
+    <li class="col-span-1 flex shadow-sm rounded-md">
+      <div class="flex-shrink-0 flex items-center justify-center w-16 bg-pylex-700 border-t border-b border-l border-pylex-600 text-white text-sm font-medium rounded-l-md"><img src="https://theme.zdassets.com/theme_assets/2155033/bc270c23058d513de5124ffea6bf9199af7a2370.png" style="width: 48px; height: 48px;"></div>
+      <div class="flex-1 flex items-center justify-between border-t border-r border-b border-pylex-600 bg-pylex-700 rounded-r-md truncate">
+        <div class="flex-1 px-4 py-2 text-sm truncate">
+          <a onclick="vanilla()" class="text-white font-medium hover:text-sky-400 cursor-pointer">Vanilla</a>
+          <p class="text-pylex-400">MC Bedrock</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class="hidden sm:block" aria-hidden="true">
+  <div class="py-5">
+    <div class="border-t border-pylex-700/50"></div>
+  </div>
+</div>
+
+<%
+  let ram = 0;
+  let disk = 0;
+  let cpu = 0;
+  let servers = pterodactyl.relationships.servers.data.length;
+    for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+      ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+      disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+      cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+    }
+%>
+
+<div>
+  <div class="md:grid md:grid-cols-3 md:gap-6">
+    <div class="md:col-span-1">
+      <div class="px-4 sm:px-0">
+        <h3 class="text-lg font-medium leading-6 text-white">Resources</h3>
+        <p class="mt-1 text-sm text-pylex-400">Decide how much of your total resource balance should be allocated to this server.</p>
+      </div>
+    </div>
+    <div class="mt-5 md:col-span-2 md:mt-0">
+      <form action="#" method="POST">
+        <div class="shadow sm:overflow-hidden sm:rounded-md">
+<div class="rounded-md bg-sky-800 p-4 mb-8">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <!-- Heroicon name: solid/information-circle -->
+      <svg class="h-5 w-5 text-sky-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3 flex-1 md:flex md:justify-between">
+      <p class="text-sm text-sky-400">We've automatically put your available resources into the input boxes, you can still change it though.</p>
+    </div>
+  </div>
+</div>
+          <div class="space-y-6 bg-pylex-700 px-4 py-5 sm:p-6 rounded-md">
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
+                <label for="company-website" class="block text-sm font-medium text-pylex-400">RAM (GB)</label>
+                <div class="mt-1 flex rounded-md shadow-sm">
+                  <input type="text" name="company-website" id="ram" class="transition ease-in-out delay-100 block w-full flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="<%= (packages ? packages.ram : 0)/1024 + extraresources.ram/1024 - ram/1024 %>" value="<%= (packages ? packages.ram : 0)/1024 + extraresources.ram/1024 - ram/1024 %>">
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
+                <label for="company-website" class="block text-sm font-medium text-pylex-400">CPU (%)</label>
+                <div class="mt-1 flex rounded-md shadow-sm">
+                  <input type="text" name="company-website" id="cpu" class="transition ease-in-out delay-100 block w-full flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" value="<%= (packages ? packages.cpu : 0) + extraresources.cpu - cpu %>" placeholder="<%= (packages ? packages.cpu : 0) + extraresources.cpu - cpu %>">
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
+                <label for="company-website" class="block text-sm font-medium text-pylex-400">Disk (GB)</label>
+                <div class="mt-1 flex rounded-md shadow-sm">
+                  <input type="text" name="company-website" id="disk" class="transition ease-in-out delay-100 block w-full flex-1 text-white rounded-md bg-pylex-600 border-pylex-500 focus:border-sky-400 focus:ring-sky-400 sm:text-sm" placeholder="<%= (packages ? packages.disk : 0)/1024 + extraresources.disk/1024 - disk/1024 %>" value="<%= (packages ? packages.disk : 0)/1024 + extraresources.disk/1024 - disk/1024 %>">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="hidden sm:block" aria-hidden="true">
+  <div class="py-5">
+    <div class="border-t border-pylex-700/50"></div>
+  </div>
+</div>
+
+<div>
+  <div class="md:grid md:grid-cols-3 md:gap-6">
+    <div class="md:col-span-1">
+      <div class="px-4 sm:px-0">
+        <h3 class="text-lg font-medium leading-6 text-white">Confirm Details</h3>
+        <p class="mt-1 text-sm text-pylex-400">Once you are ready, click the Create button.</p>
+      </div>
+    </div>
+    <div class="mt-5 md:col-span-2 md:mt-0">
+        <div class="sm:overflow-hidden sm:rounded-md">
+          <div class="flex justify-end w-full">
+        <button onclick="submitForm()" class="transition ease-in-out delay-100 group relative flex w-1/4 justify-center rounded-md border border-transparent bg-sky-400 py-2 px-4 text-sm font-medium text-white hover:bg-sky-500 focus:outline-none">
+          Create
+        </button>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+      <!-- /End replace -->
+    </div>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.js" integrity="sha512-eOUPKZXJTfgptSYQqVilRmxUNYm0XVHwcRHD4mdtCLWf/fC9XWe98IT8H1xzBkLL4Mo9GL0xWMSJtgS5te9rQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
