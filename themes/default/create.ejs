@@ -57,8 +57,6 @@ border: 1px solid rgba(7, 89, 133, 0.3);
 
               <a href="../store" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Store</a>
 
-              <a href="../referrals" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Referrals</a>
-
               <a href="../transfer" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Transfer</a>
         <% if (pterodactyl.root_admin == true) { %>
               <a href="../admin" class="transition ease-in-out delay-100 text-pylex-300 hover:bg-pylex-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</a>
@@ -159,7 +157,7 @@ border: 1px solid rgba(7, 89, 133, 0.3);
                         <% if (req.query.err == "MISSINGVARIABLE") { %>
                             You have not filled out all of the server information.
                         <% } else if (req.query.err == "ERRORONCREATE") { %>
-                           Failed to create server! This is most likely an issue on Pylex's end, not yours.
+                           An error has Occured ! Please contact support.
                         <% } else if (req.query.err == "MISSINGEGG") { %>
                             The server type for this server is not registered as a valid server type, therefore your server's RAM, disk and/or CPU could not be changed.
                         <% } else { %>
