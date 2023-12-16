@@ -119,7 +119,7 @@ app.use(express.json({
 
 const listener = app.listen(settings.website.port, function() {
   console.log(chalk.green("――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――"));
-  console.log(chalk.green("Heliactyl is online! You can now access the dashboard from the configured port"));
+  console.log(chalk.green("Eternodes Dashboard is online! You can now access the dashboard from the configured port"));
   console.log(chalk.green("――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――"));
 });
 
